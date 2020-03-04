@@ -43,8 +43,8 @@ cd src
 ```
 
 ### **Output**
-Files will be located at out/Betweenness
-Sample: TCGA-22-5478-01.txt
+Files will be located at out/Betweenness <br/>
+Ex: TCGA-22-5478-01.txt
 ```
 Gene         Betweenness value
 A1BG    :    676.579
@@ -93,23 +93,23 @@ python generate_outliers.py [Input directory] [Betweenness Results Path] [Genes 
 ```
 ### **Output**
 Files will be located at out/ <br/>
-1-out/BRCA_index.txt <br/>
-2-out/BRCA_edges.txt <br/>
-3-out/mut_freq <br/>
+1-out/graph_nodes.txt <br/>
+2-out/graph_edges.txt <br/>
+3-out/graph_mut_freq.txt <br/>
 
 
 ## **Random Walk**
 ### **Input**
 
 1 - The nodes to index file mapping:
-The file is located at out/BRCA_index.txt
+The file is located at out/graph_nodes.txt
 ```
 index GeneName
 1 A1BG
 2 A1CF
 ```
 2 - Edge file:
-The file is located at out/BRCA_edges.txt
+The file is located at out/graph_edges.txt
 ```
 node_i_Index node_j_Index weight
 0 1 1
