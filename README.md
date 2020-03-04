@@ -10,7 +10,7 @@ pip install -r requirements.txt
 ```
 ## **Betweenness**
 
-### **Input*
+### **Input**
 
 1. The PPI network file:
 
