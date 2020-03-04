@@ -98,10 +98,6 @@ Files will be located at out/ <br/>
 3-out/mut_freq <br/>
 
 
-
-
-<br/>
-<br/>
 ## **Random Walk**
 ### **Input**
 
