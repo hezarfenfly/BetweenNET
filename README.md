@@ -8,7 +8,6 @@
 ```
 pip install -r requirements.txt
 ```
-<br/>
 ## **Betweenness**
 
 ### **Input**
@@ -57,8 +56,7 @@ AADAC   :    0
 AAGAB   :    904.682
 ...
 ```
-<br/>
-<br/>
+
 ## **Generate input for Random walk**
 
 ### **Input**
@@ -94,7 +92,7 @@ To generate the outliers matrix, run  generate_outliers.py script, as follow:
 python generate_outliers.py [Input directory] [Betweenness Results Path] [Genes list]
 ```
 ### **Output**
-Files will be located at out/
+Files will be located at out/ <br/>
 1-out/BRCA_index.txt <br/>
 2-out/BRCA_edges.txt <br/>
 3-out/mut_freq <br/>
