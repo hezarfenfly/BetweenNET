@@ -92,6 +92,10 @@ To generate the outliers matrix, run  generate_outliers.py script, as follow:
 python generate_outliers.py [Input directory] [Betweenness Results Path] [Genes list]
 ```
 ### **Output**
+Files will be located at out/
+1-out/BRCA_index.txt
+2-out/BRCA_edges.txt
+3-out/mut_freq
 
 
 ## **Random Walk**
@@ -121,11 +125,15 @@ A4GALT 0.00064308681672
 ```
 
 ### **Output**
+To rank genes, run:
+```
+cd src
+python rank_genes.py
+```
+The file will be located at /out/ranking.txt
 
- 
 ## **Run**
 To run BetweenNET on the given input files:
-
 ```
 cd src
 sh execute_all.sh
