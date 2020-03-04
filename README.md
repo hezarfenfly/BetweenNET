@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# BetweenNET
-=======
 # BetweenNET: Ranking Cancer Drivers via Betweenness-based Outlier Detection and Random Walks
 
 ### This is the original repository for the BetweenNet paper
@@ -133,5 +130,3 @@ To run BetweenNET on the given input files:
 cd src
 sh execute_all.sh
 ```
-
->>>>>>> V1
