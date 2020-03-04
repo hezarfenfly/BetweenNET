@@ -1,4 +1,7 @@
-# BetweenNet: Ranking Cancer Drivers via Betweenness-based Outlier Detection and Random Walks
+<<<<<<< HEAD
+# BetweenNET
+=======
+# BetweenNET: Ranking Cancer Drivers via Betweenness-based Outlier Detection and Random Walks
 
 ### This is the original repository for the BetweenNet paper
 
@@ -8,7 +11,9 @@
 ```
 pip install -r requirements.txt
 ```
-## **1 - Input** - Betweenness
+## **Betweenness**
+
+### **Input*
 
 1. The PPI network file:
 
@@ -35,20 +40,39 @@ ACN9|57001     11.1874             ACN9|57001     176.1905
 Note: "removed"  refers to a gene is not expressed or is a mutated gene
 
 ### **Run Betweenness calculation**
+```
+cd src
+./betweenness ./data/Betweenness
+```
 
+### **Output**
+Files will be located at out/Betweenness
+Sample: TCGA-22-5478-01.txt
+```
+Gene         Betweenness value
+A1BG    :    676.579
+A2M     :    80833.4
+A2ML1   :    78.5454
+AAAS    :    1606.19
+AACS    :    0
+AADAC   :    0
+AAGAB   :    904.682
+...
+```
 
+## **Generate input for Random walk**
 
-## **2 - Input** - Bipartite Graph
+### **Input**
 1. Mutation matrix
 The file contains a matrix of mutated genes.
 The file is located at data/MutationMatrix.csv
 
 ```
 Genes   g1  g2  g3  g4 ... gn
-p1      1   0   0   1  ... 1 
-p2      0   1   1   0  ... 1 
-p3      1   1   1   0  ... 0 
-p4      1   0   0   1  ... 1 
+p1      1   0   0   1  ... 1
+p2      0   1   1   0  ... 1
+p3      1   1   1   0  ... 0
+p4      1   0   0   1  ... 1
 ....
 ```
 2. Outliers matrix
@@ -57,10 +81,10 @@ The file is located at data/OutliersMatrix.csv
 
 ```
 Genes   g1      g2      g3     ...  gn
-p1      True    True    False  ...  True 
-p2      True    False   False  ...  False 
-p3      False   True    False  ...  False 
-p4      True    False   True   ...  True 
+p1      True    True    False  ...  True
+p2      True    False   False  ...  False
+p3      False   True    False  ...  False
+p4      True    False   True   ...  True
 ....
 ```
 
@@ -70,21 +94,44 @@ To generate the outliers matrix, run  generate_outliers.py script, as follow:
 ```
 python generate_outliers.py [Input directory] [Betweenness Results Path] [Genes list]
 ```
+### **Output**
 
-## **3 - Input** - Random Walk
+
+## **Random Walk**
+### **Input**
+
 1 - The nodes to index file mapping:
-The file is located at out/hint_index_file.txt
+The file is located at out/BRCA_index.txt
+```
+index GeneName
+1 A1BG
+2 A1CF
+```
+2 - Edge file:
+The file is located at out/BRCA_edges.txt
+```
+node_i_Index node_j_Index weight
+0 1 1
+0 2 1
+```
+3 - The gene and its corresponding mutation frequency:
+This file contains the mutation frequncies, which are assigned as heats during the random walk.
 
+```
+A1BG 0.00353697749196
+A2M 0.0128617363344
+A4GALT 0.00064308681672
+```
 
+### **Output**
 
-
+ 
 ## **Run**
-
-To run OLDRIM on the given input files:
+To run BetweenNET on the given input files:
 
 ```
 cd src
-python oldrim.py
+sh execute_all.sh
 ```
-`src/config.py` contains different parameters for the inout files path and the functions used for scoring
 
+>>>>>>> V1
