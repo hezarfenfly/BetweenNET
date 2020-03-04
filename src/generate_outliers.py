@@ -7,6 +7,7 @@ from tqdm import tqdm
 import numpy as np
 from scipy.stats import truncnorm
 from scipy.optimize import fmin_slsqp
+numpy.seterr(divide = 'ignore') 
 
 
 def tumorOrNormal(s):
@@ -17,7 +18,7 @@ def tumorOrNormal(s):
 
 def load_gene_list(gene_list_input):
     human_genes_list=[]
-    full_path=input_directory+"/"+gene_list_input
+    full_path="../"+input_directory+"/"+gene_list_input
     with open(full_path) as gene_list_file:
         for gene in gene_list_file.readlines():
             gene=gene.strip()
@@ -44,6 +45,7 @@ def calculate_BW_difference(genes,directory):
     for patient in patients:
         pbar.update(1)
         #check if patient already treated
+
         if patient.split("_bw_")[1].split(".tgenet")[0] in patient_treated:
             continue
 
@@ -153,11 +155,11 @@ def main():
 
     #list files
     file_list=[]
-    for file in os.listdir(btw_results_path):
-        file_list.append(btw_results_path+"/"+file)
+    for file in os.listdir("../out/"+btw_results_path):
+        file_list.append("../out/"+btw_results_path+"/"+file)
 
     genes_list=load_gene_list(gene_list_input)
-    bw_diff=calculate_BW_difference(genes_list,btw_results_path)
+    bw_diff=calculate_BW_difference(genes_list,"../out/"+btw_results_path)
 
     #convert dictionary to pandas matrix
     bw_diff_matrix = pd.DataFrame(bw_diff)

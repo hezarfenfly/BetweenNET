@@ -7,12 +7,24 @@ from networkx.algorithms import bipartite
 
 class Data_Preprocessing:
     def load_inf_graph(file):
-        inf_graph=pd.read_csv(input_directory+"/"+file+".csv")
-        inf_graph=inf_graph.set_index("Genes")
+        inf_graph={}
+        with open("../"+input_directory+"/"+file+".txt") as ifile:
+            for line in ifile.readlines():
+                line=line.strip().split("\t")
+                if line[0] not in inf_graph:
+                    inf_graph[line[0]]=[line[1]]
+                else:
+                    inf_graph[line[0]].append(line[1])
+                
+                if line[1] not in inf_graph:
+                    inf_graph[line[1]]=[line[0]]
+                else:
+                    inf_graph[line[1]].append(line[0])
+
         return inf_graph
 
     def load_mutations_matrix(file):
-        mutation_data=pd.read_table(input_directory+"/"+file+".csv",sep="\t")
+        mutation_data=pd.read_csv("../"+input_directory+"/"+file+".csv",sep="\t")
         patients_mut=[pat for pat in mutation_data["Genes"]]
         patients_vs_mutations={}
         gene_vs_patients={}
@@ -35,7 +47,7 @@ class Data_Preprocessing:
 
 
     def load_outliers_matrix(file):
-        outliers_data=pd.read_csv(input_directory+"/"+file+".csv")
+        outliers_data=pd.read_csv("../"+input_directory+"/"+file+".csv")
         outliers_data=outliers_data.set_index(outliers_data["Genes"])
         patients_in_outliers_data=[col for col in outliers_data.index]
         outliers_data=outliers_data.transpose()
@@ -47,7 +59,6 @@ class Data_Preprocessing:
         for pat in patients:
             gene_vs_patients_outliers[pat]=[]
             if pat in patients_in_outliers_data:
-                #print(pat)
                 outliers_for_spec_patient=outliers_data.index[outliers_data[pat] == True].tolist()
                 outliers_vs_patients[pat]=outliers_for_spec_patient
                 for g in outliers_for_spec_patient:
@@ -56,7 +67,6 @@ class Data_Preprocessing:
                         gene_vs_patients_outliers[g]=[pat]
                     else:
                         gene_vs_patients_outliers[g].append([pat])
-
 
 
         outliers_vs_patients_={}
@@ -72,26 +82,22 @@ class Data_Preprocessing:
 
 class Graph:
     def construct_bipartite_graph(patient_mutations,patient_outliers):
-        #print(len(mutated_genes))
-        #print(len(outlier_genes))
+    
         G = nx.Graph()
         G.add_nodes_from(mutated_genes, bipartite=0)
         G.add_nodes_from(outlier_genes, bipartite=1)
-        #print(list(G.nodes))
         pbar = tqdm(range(len(patients)))
+        k=0
         for pat in patients:
-            #print(pat)
             pbar.update(1)
-            #print(pat in patient_mutations)
             if pat in patient_mutations and pat in patient_outliers:
-
 
                 for outlier in patient_outliers[pat]:
                     if outlier in inf_graph:
-                        #print("here")
                         for mutation in patient_mutations[pat]:
                             if mutation in inf_graph:
-                                if inf_graph[outlier][mutation]==1:
+                                
+                                if mutation in inf_graph[outlier]:
                                     outlier_=outlier+str("_")+pat
                                     G.add_edges_from([(mutation,outlier_ )])
 
@@ -106,7 +112,7 @@ class Graph:
         for node in bipartite0_nodes:
             if int(G.degree(node))==0:
                 G.remove_node(node)
-        #print(G.nodes())
+        print("Graph successfully generated with a size of: ",len(G.nodes())," nodes, and ",len(G.edges())," edges")
 
 
         return G
@@ -155,18 +161,17 @@ def main():
     outliers_matrix=sys.argv[5]
 
 
-    with open(input_directory+"/"+patients_ids,"r") as ifile:
+    with open("../"+input_directory+"/"+patients_ids+".txt") as ifile:
         patients=[pat.strip() for pat in ifile.readlines()]
 
 
     #load data
     inf_graph=Data_Preprocessing.load_inf_graph(influence_matrix)
-    print(inf_graph.head())
     mutated_genes,patient_mutations,mutation_patients=Data_Preprocessing.load_mutations_matrix(mutations_matrix)
 
     outlier_genes,patient_outliers,outlier_patients=Data_Preprocessing.load_outliers_matrix(outliers_matrix)
     G=Graph.construct_bipartite_graph(patient_mutations,patient_outliers)
-    nx.write_gml(G, "Output/bipartite_graph.gml")
+    nx.write_gml(G, "../out/bipartite_graph.gml")
 
 
     bipartite1_nodes = {n for n, d in G.nodes(data=True) if d['bipartite']==1}
@@ -185,13 +190,13 @@ def main():
         id+=1
 
     #genereate index of gene for random walk algorithm
-    output_index_file=open("Output/BRCA_index.txt","w")
+    output_index_file=open("../out/graph_nodes.txt","w")
     for gene in gene_id_map:
         row=str(gene_id_map[gene])+str("\t")+gene+str("\t")+str(0)+str("\n")
         output_index_file.write(row)
     output_index_file.close()
     #genereate index of edges for random walk algorithm
-    output_edge_file=open("Output/BRCA_edges.txt","w")
+    output_edge_file=open("../out/graph_edges.txt","w")
     edges_set=set()
     edges=G.edges()
     for edge in edges:
@@ -203,7 +208,7 @@ def main():
             output_edge_file.write(row)
     output_edge_file.close()
 
-    output_mut_freqe=open("Output/BRCA_mut.txt","w")
+    output_mut_freqe=open("../out/graph_mut_freq.txt","w")
     visited=[]
     for gene in bipartite1_nodes:
         gene_=gene.split("_")[0]

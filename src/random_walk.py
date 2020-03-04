@@ -6,7 +6,7 @@ from tqdm import tqdm
 GENE_ID_OFFSET=1
 
 def load_gene_to_id():
-    filename = "Output/graph_nodes.txt"
+    filename = "../out/graph_nodes.txt"
     id_to_gene = {}
     with open(filename) as f:
         lines = f.readlines()
@@ -17,7 +17,7 @@ def load_gene_to_id():
 
 
 def load_edge_list():
-    filename = "Output/graph_edges.txt"
+    filename = "../out/graph_edges.txt"
 
     edge_list = []
     with open(filename) as f:
@@ -48,7 +48,7 @@ def computeH():
     print("3 - Computing H")
     gene_to_id = load_gene_to_id()
     lines = []
-    with open("Output/graph_mut_freq.txt") as f:
+    with open("../out/graph_mut_freq.txt") as f:
         lines = f.readlines()
     N = len(gene_to_id)
     h = np.zeros((N, N))
@@ -79,13 +79,14 @@ def computeW():
         w[edge[1]][edge[0]] = 1
     return normalizeW(w)
 
+
+print()
 network_beta=0.4
-path="Output/"
+path="../out/"
 W = computeW()
 sp_w = sp.csc_matrix(W)
 del W
 sp.save_npz(path + "random_walk_w_matrix.npz", sp_w)
-print("W")
 
 H = computeH()
 sp_h = sp.csc_matrix(H)

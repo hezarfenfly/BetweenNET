@@ -77,14 +77,7 @@ void intActDataGraph(
 			e = (*intActGraph).new_edge(n, v);
 			edges_set.insert(e);
 
-			// getting the confidence score and convering into integer values ranging from 1 to weight_key
-			score = ::atof(tokens[2].c_str());
-			score = 1 - score;
-			confidence_value = -1;
-			for (int i = 1; i <= weight_key; i++)
-				if ((score <= i * step_size) && (score > (i - 1) * step_size))
-                    confidence_value = i;
-        	(*edge_weight_map)[index(e)] = confidence_value;
+			
 		}
 	conv_reader1.close();
 
