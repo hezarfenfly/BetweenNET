@@ -1,4 +1,4 @@
-import scipy.sparse as sp
+@import scipy.sparse as sp
 import numpy as np
 
 def load_matrix():
